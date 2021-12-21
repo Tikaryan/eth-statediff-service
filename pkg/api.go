@@ -19,6 +19,7 @@ import (
 	"context"
 
 	sd "github.com/ethereum/go-ethereum/statediff"
+	"github.com/sirupsen/logrus"
 )
 
 // APIName is the namespace used for the state diffing service API
@@ -42,7 +43,14 @@ func NewPublicStateDiffAPI(sds StateDiffService) *PublicStateDiffAPI {
 
 // StateDiffAt returns a state diff payload at the specific blockheight
 func (api *PublicStateDiffAPI) StateDiffAt(ctx context.Context, blockNumber uint64, params sd.Params) (*sd.Payload, error) {
-	return api.sds.StateDiffAt(blockNumber, params)
+	// return api.sds.StateDiffAt(blockNumber, params)
+	p, e := api.sds.StateDiffAt(blockNumber, params)
+	if e != nil {
+		logrus.Debugf("error %v", e)
+	} else {
+		logrus.Debugf("payload %v", p)
+	}
+	return p, e
 }
 
 // StateTrieAt returns a state trie payload at the specific blockheight
